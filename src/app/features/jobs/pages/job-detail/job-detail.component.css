@@ -1,0 +1,137 @@
+.job-detail-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+.job-card {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+  margin-top: 0;
+  color: #333;
+}
+.company {
+  font-size: 1.2rem;
+  color: #007bff;
+  margin: 10px 0;
+}
+.location, .salary, .job-type, .deadline {
+  margin: 5px 0;
+  color: #555;
+}
+h3 {
+  margin: 20px 0 10px;
+  color: #444;
+}
+.description {
+  line-height: 1.6;
+}
+ul {
+  padding-left: 20px;
+}
+.apply-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+.apply-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.apply-btn:hover {
+  background-color: #218838;
+}
+.apply-form {
+  margin-top: 20px;
+}
+.apply-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  margin-bottom: 15px;
+}
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background-color: #5a6268;
+}
+.success {
+  color: #28a745;
+  margin-top: 10px;
+}
+.error {
+  color: #dc3545;
+  margin-top: 10px;
+}
+.info {
+  color: #17a2b8;
+}
+.closed-message {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 4px;
+}
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #007bff;
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+.loading, .error {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
+.favourite-section {
+  margin: 20px 0;
+}
+.favourite-btn {
+  background-color: #ffc107;
+  color: #212529;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+.favourite-btn:hover {
+  background-color: #e0a800;
+}

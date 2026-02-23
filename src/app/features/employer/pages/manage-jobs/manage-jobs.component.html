@@ -1,0 +1,37 @@
+<div class="manage-jobs-container">
+  <h1>Manage Jobs</h1>
+  <div *ngIf="loading" class="loading">Loading...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="!loading && jobs.length === 0" class="no-data">You haven't posted any jobs yet.</div>
+
+  <table *ngIf="!loading && jobs.length > 0" class="jobs-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let job of jobs">
+        <td>{{ job.title }}</td>
+        <td>
+          <span class="status" [ngClass]="{
+            'status-active': getStatus(job) === 'Active',
+            'status-closed': getStatus(job) === 'Closed',
+            'status-filled': getStatus(job) === 'Filled'
+          }">{{ getStatus(job) }}</span>
+        </td>
+        <td>{{ job.applicationDeadline | date:'mediumDate' }}</td>
+        <td class="actions">
+          <button (click)="closeJob(job.id)" [disabled]="!job.isActive || job.isFilled" class="btn btn-warning">Close</button>
+          <button (click)="reopenJob(job.id)" [disabled]="job.isActive || job.isFilled" class="btn btn-success">Reopen</button>
+          <button (click)="markFilled(job.id)" [disabled]="job.isFilled" class="btn btn-info">Mark Filled</button>
+          <button (click)="deleteJob(job.id)" class="btn btn-danger">Delete</button>
+          <a [routerLink]="['/employer/jobs', job.id, 'applicants']" class="btn btn-secondary">Applicants</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
