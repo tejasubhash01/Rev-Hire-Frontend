@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms'; // <-- add this
 import { ApplicationService, ApplicationResponse } from '../../../../core/services/application.service';
 
 @Component({
   selector: 'app-my-applications',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule], // <-- add FormsModule here
   templateUrl: './my-applications.component.html',
   styleUrls: ['./my-applications.component.css']
 })
@@ -14,6 +15,11 @@ export class MyApplicationsComponent implements OnInit {
   applications: ApplicationResponse[] = [];
   loading = true;
   error = '';
+
+  // Withdraw modal state
+  showWithdrawModal = false;
+  withdrawApplicationId: number | null = null;
+  withdrawReason = '';
 
   constructor(private applicationService: ApplicationService) {}
 
@@ -35,10 +41,23 @@ export class MyApplicationsComponent implements OnInit {
     });
   }
 
-  withdraw(applicationId: number) {
-    const reason = prompt('Optional reason for withdrawal:');
-    this.applicationService.withdrawApplication(applicationId, reason || undefined).subscribe({
+  openWithdrawModal(applicationId: number) {
+    this.withdrawApplicationId = applicationId;
+    this.withdrawReason = '';
+    this.showWithdrawModal = true;
+  }
+
+  closeWithdrawModal() {
+    this.showWithdrawModal = false;
+    this.withdrawApplicationId = null;
+    this.withdrawReason = '';
+  }
+
+  confirmWithdraw() {
+    if (!this.withdrawApplicationId) return;
+    this.applicationService.withdrawApplication(this.withdrawApplicationId, this.withdrawReason || undefined).subscribe({
       next: () => {
+        this.closeWithdrawModal();
         this.loadApplications(); // refresh list
       },
       error: (err) => {

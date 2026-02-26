@@ -31,7 +31,7 @@ h1 {
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: 500;
-  margin: 10px 0;
+  margin: 10px 0 15px; /* space below status */
 }
 .status-applied {
   background-color: #e2e3e5;
@@ -61,31 +61,81 @@ h1 {
   background: #f8f9fa;
   border-radius: 4px;
 }
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.btn-withdraw, .btn-view {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
 .btn-withdraw {
   background-color: #ffc107;
   color: #212529;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px;
 }
 .btn-withdraw:hover {
   background-color: #e0a800;
 }
 .btn-view {
-  display: inline-block;
   background-color: #007bff;
   color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  text-decoration: none;
 }
 .btn-view:hover {
   background-color: #0056b3;
 }
-.error, .no-data {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
+/* Modal styles (if not already present) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

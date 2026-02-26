@@ -29,8 +29,9 @@ export class LoginComponent {
         }
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Login failed. Please check your credentials.';
+        this.errorMessage = 'Login failed. Please check your credentials.';
       }
     });
   }
 }
+

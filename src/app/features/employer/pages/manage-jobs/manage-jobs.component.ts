@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { EmployerService, JobPostSummary } from '../../../../core/services/employer.service';
 import { JobService } from '../../../../core/services/job.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -16,9 +17,17 @@ export class ManageJobsComponent implements OnInit {
   loading = true;
   error = '';
 
+  // Modal state
+  showConfirmModal = false;
+  confirmAction: 'close' | 'reopen' | 'markFilled' | 'delete' | null = null;
+  selectedJobId: number | null = null;
+  confirmTitle = '';
+  confirmMessage = '';
+
   constructor(
     private employerService: EmployerService,
-    private jobService: JobService
+    private jobService: JobService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -39,45 +48,74 @@ export class ManageJobsComponent implements OnInit {
     });
   }
 
-  closeJob(id: number) {
-    if (confirm('Are you sure you want to close this job? It will no longer be visible to applicants.')) {
-      this.jobService.closeJobPost(id).subscribe({
-        next: () => this.loadJobs(),
-        error: (err) => console.error(err)
-      });
+  openConfirmModal(action: 'close' | 'reopen' | 'markFilled' | 'delete', jobId: number, jobTitle: string) {
+    this.confirmAction = action;
+    this.selectedJobId = jobId;
+    switch (action) {
+      case 'close':
+        this.confirmTitle = 'Close Job';
+        this.confirmMessage = `Are you sure you want to close the job "${jobTitle}"? It will no longer be visible to applicants.`;
+        break;
+      case 'reopen':
+        this.confirmTitle = 'Reopen Job';
+        this.confirmMessage = `Reopen "${jobTitle}"? It will become active again.`;
+        break;
+      case 'markFilled':
+        this.confirmTitle = 'Mark Job as Filled';
+        this.confirmMessage = `Mark "${jobTitle}" as filled? This will close it and mark as filled.`;
+        break;
+      case 'delete':
+        this.confirmTitle = 'Delete Job';
+        this.confirmMessage = `Are you sure you want to delete "${jobTitle}"? This action cannot be undone.`;
+        break;
     }
+    this.showConfirmModal = true;
   }
 
-  reopenJob(id: number) {
-    if (confirm('Reopen this job? It will become active again.')) {
-      this.jobService.reopenJobPost(id).subscribe({
-        next: () => this.loadJobs(),
-        error: (err) => console.error(err)
-      });
-    }
+  closeConfirmModal() {
+    this.showConfirmModal = false;
+    this.confirmAction = null;
+    this.selectedJobId = null;
   }
 
-  markFilled(id: number) {
-    if (confirm('Mark this job as filled? This will close it and mark as filled.')) {
-      this.jobService.markJobFilled(id).subscribe({
-        next: () => this.loadJobs(),
-        error: (err) => console.error(err)
-      });
+  confirmActionHandler() {
+    if (!this.confirmAction || !this.selectedJobId) return;
+    switch (this.confirmAction) {
+      case 'close':
+        this.jobService.closeJobPost(this.selectedJobId).subscribe({
+          next: () => this.loadJobs(),
+          error: (err) => console.error(err)
+        });
+        break;
+      case 'reopen':
+        this.jobService.reopenJobPost(this.selectedJobId).subscribe({
+          next: () => this.loadJobs(),
+          error: (err) => console.error(err)
+        });
+        break;
+      case 'markFilled':
+        this.jobService.markJobFilled(this.selectedJobId).subscribe({
+          next: () => this.loadJobs(),
+          error: (err) => console.error(err)
+        });
+        break;
+      case 'delete':
+        this.jobService.deleteJobPost(this.selectedJobId).subscribe({
+          next: () => this.loadJobs(),
+          error: (err) => console.error(err)
+        });
+        break;
     }
-  }
-
-  deleteJob(id: number) {
-    if (confirm('Are you sure you want to delete this job? This action cannot be undone.')) {
-      this.jobService.deleteJobPost(id).subscribe({
-        next: () => this.loadJobs(),
-        error: (err) => console.error(err)
-      });
-    }
+    this.closeConfirmModal();
   }
 
   getStatus(job: JobPostSummary): string {
     if (job.isFilled) return 'Filled';
     if (job.isActive) return 'Active';
     return 'Closed';
+  }
+
+  goToDashboard() {
+    this.router.navigate(['/employer/dashboard']);
   }
 }

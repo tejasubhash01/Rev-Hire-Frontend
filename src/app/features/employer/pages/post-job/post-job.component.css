@@ -68,3 +68,17 @@ button:disabled {
   margin-top: 10px;
   font-weight: 500;
 }
+.btn-secondary {
+  display: inline-block;
+  width: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+
+  /* spacing */
+  margin-top: 12px;
+  margin-left: 12px;
+  margin-bottom: 12px;
+
+  /* for flex layouts */
+  align-self: flex-start;
+}

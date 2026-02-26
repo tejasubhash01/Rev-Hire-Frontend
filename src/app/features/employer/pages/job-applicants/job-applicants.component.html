@@ -2,18 +2,60 @@
   <h1>Applicants for Job #{{ jobId }}</h1>
   <a routerLink="/employer/manage-jobs" class="back-link">← Back to Manage Jobs</a>
 
+  <!-- ✅ FILTER BAR -->
+  <div class="filters" *ngIf="!loading">
+    <input class="filter-input" type="text" placeholder="Search name/skills/education/experience"
+           [(ngModel)]="search" (input)="applyFilters()" />
+
+    <input class="filter-input" type="text" placeholder="Skill (ex: java)"
+           [(ngModel)]="skill" (input)="applyFilters()" />
+
+    <input class="filter-input" type="text" placeholder="Education (ex: btech)"
+           [(ngModel)]="education" (input)="applyFilters()" />
+
+    <input class="filter-input" type="text" placeholder="Experience (ex: 2 years)"
+           [(ngModel)]="experience" (input)="applyFilters()" />
+
+    <select class="filter-input" [(ngModel)]="status" (change)="applyFilters()">
+      <option value="">All Status</option>
+      <option value="APPLIED">APPLIED</option>
+      <option value="UNDER_REVIEW">UNDER_REVIEW</option>
+      <option value="SHORTLISTED">SHORTLISTED</option>
+      <option value="REJECTED">REJECTED</option>
+      <option value="WITHDRAWN">WITHDRAWN</option>
+    </select>
+
+    <div class="date-row">
+      <label>From</label>
+      <input type="date" [(ngModel)]="fromDate" (change)="applyFilters()" />
+      <label>To</label>
+      <input type="date" [(ngModel)]="toDate" (change)="applyFilters()" />
+    </div>
+
+    <button class="btn btn-secondary" (click)="resetFilters()">Reset</button>
+  </div>
+
   <div *ngIf="loading" class="loading">Loading applicants...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
-  <div *ngIf="!loading && applicants.length === 0" class="no-data">No applications yet.</div>
+  <div *ngIf="!loading && filteredApplicants.length === 0" class="no-data">No applications found.</div>
 
-  <div *ngIf="!loading && applicants.length > 0" class="applicants-grid">
-    <div *ngFor="let app of applicants" class="applicant-card">
+  <div *ngIf="!loading && filteredApplicants.length > 0" class="applicants-grid">
+    <div *ngFor="let app of filteredApplicants" class="applicant-card">
       <h3>{{ app.jobSeekerName }}</h3>
+
       <p class="applied-date">Applied: {{ app.appliedDate | date:'medium' }}</p>
+
+      <!-- show extra details -->
+     <!-- show extra details -->
+<p *ngIf="app.education"><b>Education:</b> {{ app.education }}</p>
+<p *ngIf="app.experience"><b>Experience:</b> {{ app.experience }}</p>
+<p *ngIf="app.skills?.length"><b>Skills:</b> {{ app.skills?.join(', ') }}</p>
+
       <p class="status" [ngClass]="getStatusClass(app.status)">Status: {{ app.status }}</p>
       <p *ngIf="app.coverLetter" class="cover-letter">Cover Letter: {{ app.coverLetter }}</p>
+
       <div class="actions">
-        <button (click)="updateStatus(app)" class="btn btn-primary">Update Status</button>
+        <button (click)="openStatusModal(app)" class="btn btn-primary">Update Status</button>
         <button (click)="addNote(app)" class="btn btn-secondary">Add Note</button>
         <button (click)="viewProfile(app.jobSeekerId)" class="btn-view-profile">View Profile</button>
       </div>
@@ -21,7 +63,32 @@
   </div>
 </div>
 
-<!-- Profile Modal -->
+<!-- Status Update Modal -->
+<div class="modal" *ngIf="showStatusModal" (click)="closeStatusModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>Update Application Status</h3>
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" [(ngModel)]="statusUpdateData.status" class="form-control">
+        <option value="APPLIED">Applied</option>
+        <option value="UNDER_REVIEW">Under Review</option>
+        <option value="SHORTLISTED">Shortlisted</option>
+        <option value="REJECTED">Rejected</option>
+        <option value="WITHDRAWN">Withdrawn</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="notes">Notes (optional)</label>
+      <textarea id="notes" [(ngModel)]="statusUpdateData.employerNotes" rows="3" class="form-control"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button (click)="submitStatusUpdate()" class="btn btn-success">Update</button>
+      <button (click)="closeStatusModal()" class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal (unchanged) -->
 <div class="modal" *ngIf="showProfileModal" (click)="closeProfileModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div *ngIf="profileLoading">Loading profile...</div>
@@ -61,7 +128,7 @@
   </div>
 </div>
 
-<!-- Note Modal -->
+<!-- Note Modal (unchanged) -->
 <div class="modal" *ngIf="showNoteModal" (click)="closeNoteModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Add Note for {{ selectedApplication?.jobSeekerName }}</h3>

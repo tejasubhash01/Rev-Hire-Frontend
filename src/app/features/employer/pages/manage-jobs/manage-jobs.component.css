@@ -87,6 +87,11 @@ h1 {
   color: white;
 }
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: #3b86c8;
   color: white;
+}
+.back-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
 }

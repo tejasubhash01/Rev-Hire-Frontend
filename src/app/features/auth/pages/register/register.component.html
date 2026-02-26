@@ -1,4 +1,9 @@
 <div class="register-container">
+  <div class="logo-container">
+    <a routerLink="/">
+      <img src="assets/logo.png" alt="RevHire Logo">
+    </a>
+  </div>
   <h2>Register</h2>
   <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
     <!-- Common fields with validation messages -->
@@ -105,3 +110,4 @@
   </form>
   <p>Already have an account? <a routerLink="/login">Login</a></p>
 </div>
+

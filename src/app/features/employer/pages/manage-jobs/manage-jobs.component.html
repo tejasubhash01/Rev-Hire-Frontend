@@ -1,4 +1,5 @@
 <div class="manage-jobs-container">
+  <button class="btn btn-secondary back-btn" (click)="goToDashboard()">← Back to Dashboard</button>
   <h1>Manage Jobs</h1>
   <div *ngIf="loading" class="loading">Loading...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
@@ -25,13 +26,25 @@
         </td>
         <td>{{ job.applicationDeadline | date:'mediumDate' }}</td>
         <td class="actions">
-          <button (click)="closeJob(job.id)" [disabled]="!job.isActive || job.isFilled" class="btn btn-warning">Close</button>
-          <button (click)="reopenJob(job.id)" [disabled]="job.isActive || job.isFilled" class="btn btn-success">Reopen</button>
-          <button (click)="markFilled(job.id)" [disabled]="job.isFilled" class="btn btn-info">Mark Filled</button>
-          <button (click)="deleteJob(job.id)" class="btn btn-danger">Delete</button>
+          <button (click)="openConfirmModal('close', job.id, job.title)" [disabled]="!job.isActive || job.isFilled" class="btn btn-warning">Close</button>
+          <button (click)="openConfirmModal('reopen', job.id, job.title)" [disabled]="job.isActive || job.isFilled" class="btn btn-success">Reopen</button>
+          <button (click)="openConfirmModal('markFilled', job.id, job.title)" [disabled]="job.isFilled" class="btn btn-info">Mark Filled</button>
+          <button (click)="openConfirmModal('delete', job.id, job.title)" class="btn btn-danger">Delete</button>
           <a [routerLink]="['/employer/jobs', job.id, 'applicants']" class="btn btn-secondary">Applicants</a>
         </td>
       </tr>
     </tbody>
   </table>
+</div>
+
+
+<div class="modal" *ngIf="showConfirmModal" (click)="closeConfirmModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3>{{ confirmTitle }}</h3>
+    <p>{{ confirmMessage }}</p>
+    <div class="modal-actions">
+      <button (click)="confirmActionHandler()" class="btn btn-danger">Confirm</button>
+      <button (click)="closeConfirmModal()" class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
 </div>

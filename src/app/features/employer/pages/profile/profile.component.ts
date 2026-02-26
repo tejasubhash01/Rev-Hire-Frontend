@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployerService, EmployerProfile, UpdateEmployerProfileRequest } from '../../../../core/services/employer.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -16,7 +16,10 @@ export class ProfileComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
-  constructor(private employerService: EmployerService) {}
+  constructor(
+  private employerService: EmployerService,
+  private router: Router
+) {}
 
   ngOnInit() {
     this.loadProfile();
@@ -49,14 +52,24 @@ export class ProfileComponent implements OnInit {
       location: this.profile.location
     };
     this.employerService.updateProfile(updateData).subscribe({
-      next: (updated) => {
-        this.profile = updated;
-        this.successMessage = 'Profile updated successfully.';
-      },
+    next: (updated) => {
+  this.profile = updated;
+  this.successMessage = 'Profile updated successfully.';
+  this.errorMessage = '';
+
+  // ✅ Navigate to Employer Dashboard
+  setTimeout(() => {
+    this.router.navigate(['/employer/dashboard']);
+  }, 1500);
+},
       error: (err) => {
         console.error(err);
         this.errorMessage = 'Update failed. Please try again.';
       }
     });
   }
+
+  goBack() {
+  this.router.navigate(['/employer/dashboard']);
+}
 }

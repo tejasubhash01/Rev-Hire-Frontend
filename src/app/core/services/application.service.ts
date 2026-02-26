@@ -19,6 +19,9 @@ export interface ApplicationResponse {
   status: string;
   coverLetter?: string;
   appliedDate: string;
+  education?: string;
+  experience?: string;
+  skills?: string[];
 }
 
 export interface UpdateApplicationStatusRequest {

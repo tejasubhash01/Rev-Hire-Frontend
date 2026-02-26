@@ -4,7 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
-
+import { Router } from '@angular/router';
 export interface LoginRequest {
   email: string;
   password: string;
@@ -41,6 +41,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -72,10 +73,11 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+ logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
     }
+    this.router.navigateByUrl('/login', { replaceUrl: true });
   }
 
   isLoggedIn(): boolean {

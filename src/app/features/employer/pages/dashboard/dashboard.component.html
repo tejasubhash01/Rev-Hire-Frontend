@@ -21,8 +21,10 @@
   <div *ngIf="loading">Loading...</div>
   <div *ngIf="error" class="error">{{ error }}</div>
 </div>
+
 <div class="dashboard-actions">
-  <a routerLink="/employer/profile" class="profile-link">Edit Company Profile</a>
+  <a routerLink="/employer/view-profile" class="profile-link">View Profile</a>
+  <a routerLink="/employer/profile" class="profile-link">Edit Profile</a>
   <a routerLink="/employer/post-job" class="post-job-link">Post a New Job</a>
   <a routerLink="/employer/manage-jobs" class="manage-jobs-link">Manage Jobs</a>
 </div>
