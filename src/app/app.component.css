@@ -1,11 +1,5 @@
-:host {
-  display: block;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e6f0fa 0%, #b0d4f0 100%);
-}
-
 main {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 120px); /* adjust if navbar+footer height changes */
   padding: 20px;
-  padding-bottom: 80px;
+  padding-bottom: 80px; /* space for fixed footer */
 }

@@ -3,11 +3,22 @@
     <h1>{{ job.title }}</h1>
     <p class="company">{{ job.companyName }}</p>
     <p class="location">{{ job.location }}</p>
-    <div class="salary" *ngIf="job.salaryMin">
-      ₹{{ job.salaryMin | number }} - ₹{{ job.salaryMax | number }}
+
+    <!-- Meta row: salary, job type, deadline -->
+    <div class="meta-row">
+      <div class="meta-item salary" *ngIf="job.salaryMin">
+        <span class="meta-label">Salary</span>
+        <span class="meta-value">₹{{ job.salaryMin | number }} - ₹{{ job.salaryMax | number }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Job Type</span>
+        <span class="meta-value">{{ job.jobType }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Deadline</span>
+        <span class="meta-value">{{ job.applicationDeadline | date }}</span>
+      </div>
     </div>
-    <p class="job-type">{{ job.jobType }}</p>
-    <p class="deadline">Apply before: {{ job.applicationDeadline | date }}</p>
 
     <h3>Description</h3>
     <p class="description">{{ job.description }}</p>
@@ -26,7 +37,7 @@
     <h3>Number of Openings</h3>
     <p>{{ job.numberOfOpenings }}</p>
 
-    <!-- Favourite Button (visible only to job seekers) -->
+    <!-- Favourite Button -->
     <div *ngIf="authService.isLoggedIn() && authService.getRole() === 'JOB_SEEKER'" class="favourite-section">
       <button (click)="toggleFavourite()" class="favourite-btn">
         {{ isFavourite ? '★ Remove from Favourites' : '☆ Save to Favourites' }}
@@ -42,7 +53,6 @@
         <button (click)="toggleApplyForm()" class="apply-btn">
           {{ showApplyForm ? 'Cancel' : 'Apply for this Job' }}
         </button>
-
         <div *ngIf="showApplyForm" class="apply-form">
           <h3>Submit Your Application</h3>
           <textarea
@@ -54,9 +64,11 @@
             <button (click)="submitApplication()" class="submit-btn">Submit Application</button>
             <button (click)="toggleApplyForm()" class="cancel-btn">Cancel</button>
           </div>
-          <p *ngIf="applySuccess" class="success">{{ applySuccess }}</p>
-          <p *ngIf="applyError" class="error">{{ applyError }}</p>
         </div>
+
+        <!-- Success/Error messages always visible -->
+        <p *ngIf="applySuccess" class="success">{{ applySuccess }}</p>
+        <p *ngIf="applyError" class="error">{{ applyError }}</p>
       </div>
       <div *ngIf="authService.isLoggedIn() && authService.getRole() !== 'JOB_SEEKER'">
         <p class="info">Only job seekers can apply.</p>

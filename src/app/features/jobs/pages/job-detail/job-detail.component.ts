@@ -108,23 +108,24 @@ export class JobDetailComponent implements OnInit {
     this.applySuccess = '';
     this.applyError = '';
   }
-
   submitApplication() {
-    if (!this.job) return;
-    const request: ApplyJobRequest = {
-      jobPostId: this.job.id,
-      coverLetter: this.coverLetter
-    };
-    this.applicationService.applyForJob(request).subscribe({
-      next: () => {
-        this.applySuccess = 'Application submitted successfully!';
-        this.showApplyForm = false;
-        this.coverLetter = '';
-      },
-      error: (err) => {
-        this.applyError = err.error?.message || 'Application failed.';
-        console.error(err);
-      }
-    });
-  }
+  if (!this.job) return;
+  const request: ApplyJobRequest = {
+    jobPostId: this.job.id,
+    coverLetter: this.coverLetter
+  };
+  console.log('Submitting application:', request);
+  this.applicationService.applyForJob(request).subscribe({
+    next: (response) => {
+      console.log('Apply success:', response);
+      this.applySuccess = 'Application submitted successfully!';
+      this.showApplyForm = false;
+      this.coverLetter = '';
+    },
+    error: (err) => {
+      console.error('Apply error:', err);
+      this.applyError = err.error?.message || 'Application failed.';
+    }
+  });
+}
 }

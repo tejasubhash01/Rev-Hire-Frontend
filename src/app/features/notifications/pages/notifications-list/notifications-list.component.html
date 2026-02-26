@@ -18,7 +18,7 @@
       <div class="notification-content">
         <p class="message">{{ notif.message }}</p>
         <p class="time">{{ getRelativeTime(notif.createdAt) }}</p>
-        <a *ngIf="notif.link" [routerLink]="[notif.link]" class="view-link">View</a>
+
       </div>
       <button *ngIf="!notif.isRead" (click)="markAsRead(notif.id)" class="btn-read">Mark Read</button>
     </div>

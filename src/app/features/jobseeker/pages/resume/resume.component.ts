@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { JobseekerService, ResumeText, UpdateResumeTextRequest, ResumeFile } from '../../../../core/services/jobseeker.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-resume',
   standalone: true,
@@ -35,7 +35,7 @@ export class ResumeComponent implements OnInit {
   uploadSuccess = '';
   uploadError = '';
 
-  constructor(private jobseekerService: JobseekerService) {}
+  constructor(private jobseekerService: JobseekerService,private router: Router) {}
 
   ngOnInit() {
     this.loadResumeText();
@@ -136,5 +136,8 @@ export class ResumeComponent implements OnInit {
         this.uploadLoading = false;
       }
     });
+  }
+    goBack() {
+    this.router.navigate(['/jobseeker/dashboard']);
   }
 }

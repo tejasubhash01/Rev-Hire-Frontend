@@ -2,12 +2,17 @@
   <div class="nav-container">
     <div class="logo">
       <a routerLink="/">
-        <img src="image.png" alt="RevHire Logo" style="height:40px;">
+       <a routerLink="/" class="brand">
+  <img src="assets/image.png" alt="RevHire" class="logo" />
+</a>
       </a>
     </div>
     <div class="nav-links">
+      <!-- Public links -->
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
       <a routerLink="/jobs" routerLinkActive="active">Jobs</a>
+      <a routerLink="/about" routerLinkActive="active">About Us</a>
+      <a routerLink="/support" routerLinkActive="active">Support</a>
 
       <!-- Not logged in -->
       <ng-container *ngIf="!authService.isLoggedIn()">

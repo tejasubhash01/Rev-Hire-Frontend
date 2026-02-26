@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ApplicationService, ApplicationResponse, UpdateApplicationStatusRequest } from '../../../../core/services/application.service';
+import {
+  ApplicationService,
+  ApplicationResponse,
+  UpdateApplicationStatusRequest
+} from '../../../../core/services/application.service';
 import { JobseekerService, JobSeekerProfile } from '../../../../core/services/jobseeker.service';
 
 @Component({
@@ -14,19 +18,37 @@ import { JobseekerService, JobSeekerProfile } from '../../../../core/services/jo
 })
 export class JobApplicantsComponent implements OnInit {
   jobId!: number;
-  applicants: ApplicationResponse[] = [];
+
+  // ✅ keep original + filtered
+  allApplicants: ApplicationResponse[] = [];
+  filteredApplicants: ApplicationResponse[] = [];
+
   loading = true;
   error = '';
+
+  // ✅ Filters
+  search = '';
+  skill = '';
+  education = '';
+  experience = '';
+  status = '';
+  fromDate = '';
+  toDate = '';
+
   selectedApplication: ApplicationResponse | null = null;
   showNoteModal = false;
   noteContent = '';
-  statusUpdateData: UpdateApplicationStatusRequest = { status: '' };
 
   // Profile modal
   showProfileModal = false;
   selectedSeekerProfile: JobSeekerProfile | null = null;
   profileLoading = false;
   profileError = '';
+
+  // Status update modal
+  showStatusModal = false;
+  statusUpdateData: UpdateApplicationStatusRequest = { status: '', employerNotes: '' };
+  statusApplicationId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,7 +65,8 @@ export class JobApplicantsComponent implements OnInit {
     this.loading = true;
     this.applicationService.getApplicationsForJob(this.jobId).subscribe({
       next: (data) => {
-        this.applicants = data;
+        this.allApplicants = data || [];
+        this.applyFilters();
         this.loading = false;
       },
       error: (err) => {
@@ -52,6 +75,65 @@ export class JobApplicantsComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  // ✅ Call this on input/change in HTML
+  applyFilters() {
+    const q = (this.search || '').toLowerCase().trim();
+    const skill = (this.skill || '').toLowerCase().trim();
+    const edu = (this.education || '').toLowerCase().trim();
+    const exp = (this.experience || '').toLowerCase().trim();
+    const st = (this.status || '').toLowerCase().trim();
+
+    const from = this.fromDate ? new Date(this.fromDate) : null;
+    const to = this.toDate ? new Date(this.toDate) : null;
+    if (to) to.setHours(23, 59, 59, 999);
+
+    this.filteredApplicants = this.allApplicants.filter(a => {
+      const name = (a.jobSeekerName || '').toLowerCase();
+
+      // backend added these fields
+      const educationText = ((a as any).education || '').toLowerCase();
+      const experienceText = ((a as any).experience || '').toLowerCase();
+
+      // ✅ IMPORTANT: skills is array now
+      const skillsText = (((a as any).skills ?? []) as string[]).join(' ').toLowerCase();
+
+      const statusText = (a.status || '').toLowerCase();
+      const applied = a.appliedDate ? new Date(a.appliedDate) : null;
+
+      // Search in all
+      const matchesQ =
+        !q ||
+        name.includes(q) ||
+        educationText.includes(q) ||
+        experienceText.includes(q) ||
+        skillsText.includes(q);
+
+      if (!matchesQ) return false;
+
+      if (skill && !skillsText.includes(skill)) return false;
+      if (edu && !educationText.includes(edu)) return false;
+      if (exp && !experienceText.includes(exp)) return false;
+
+      if (st && statusText !== st) return false;
+
+      if (from && (!applied || applied < from)) return false;
+      if (to && (!applied || applied > to)) return false;
+
+      return true;
+    });
+  }
+
+  resetFilters() {
+    this.search = '';
+    this.skill = '';
+    this.education = '';
+    this.experience = '';
+    this.status = '';
+    this.fromDate = '';
+    this.toDate = '';
+    this.filteredApplicants = [...this.allApplicants];
   }
 
   viewProfile(profileId: number) {
@@ -81,17 +163,12 @@ export class JobApplicantsComponent implements OnInit {
         const a = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
         a.href = url;
-        a.download = ''; // filename will be from Content-Disposition header
+        a.download = '';
         a.click();
         window.URL.revokeObjectURL(url);
       },
       error: (err) => {
         console.error('Download failed with error:', err);
-        console.log('Status:', err.status);
-        console.log('Message:', err.message);
-        if (err.error) {
-          console.log('Error response:', err.error);
-        }
         alert('Failed to download file. Check console for details (F12).');
       }
     });
@@ -102,25 +179,37 @@ export class JobApplicantsComponent implements OnInit {
     this.selectedSeekerProfile = null;
   }
 
-  updateStatus(application: ApplicationResponse) {
-    const newStatus = prompt('Enter new status (APPLIED, UNDER_REVIEW, SHORTLISTED, REJECTED, WITHDRAWN):', application.status);
-    if (newStatus && newStatus !== application.status) {
-      const notes = prompt('Add optional notes:');
-      const updateData: UpdateApplicationStatusRequest = {
-        status: newStatus,
-        employerNotes: notes || undefined
-      };
-      this.applicationService.updateApplicationStatus(application.id, updateData).subscribe({
-        next: (updated) => {
-          const index = this.applicants.findIndex(a => a.id === application.id);
-          if (index !== -1) this.applicants[index] = updated;
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Failed to update status.');
-        }
-      });
-    }
+  openStatusModal(application: ApplicationResponse) {
+    this.statusApplicationId = application.id;
+    this.statusUpdateData = {
+      status: application.status,
+      employerNotes: ''
+    };
+    this.showStatusModal = true;
+  }
+
+  closeStatusModal() {
+    this.showStatusModal = false;
+    this.statusApplicationId = null;
+    this.statusUpdateData = { status: '', employerNotes: '' };
+  }
+
+  submitStatusUpdate() {
+    if (!this.statusApplicationId) return;
+    this.applicationService.updateApplicationStatus(this.statusApplicationId, this.statusUpdateData).subscribe({
+      next: (updated) => {
+        const index = this.allApplicants.findIndex(a => a.id === updated.id);
+        if (index !== -1) this.allApplicants[index] = updated;
+
+        // ✅ refresh list after update
+        this.applyFilters();
+        this.closeStatusModal();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to update status.');
+      }
+    });
   }
 
   addNote(application: ApplicationResponse) {
@@ -133,8 +222,11 @@ export class JobApplicantsComponent implements OnInit {
     if (!this.selectedApplication || !this.noteContent.trim()) return;
     this.applicationService.addNote(this.selectedApplication.id, { note: this.noteContent }).subscribe({
       next: (updated) => {
-        const index = this.applicants.findIndex(a => a.id === this.selectedApplication!.id);
-        if (index !== -1) this.applicants[index] = updated;
+        const index = this.allApplicants.findIndex(a => a.id === updated.id);
+        if (index !== -1) this.allApplicants[index] = updated;
+
+        // ✅ refresh list after note update
+        this.applyFilters();
         this.closeNoteModal();
       },
       error: (err) => {

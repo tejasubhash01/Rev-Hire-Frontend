@@ -1,3 +1,6 @@
+<button class="btn btn-secondary back-btn" (click)="goBack()">
+  ← Back
+</button>
 <div class="profile-container">
   <h1>Company Profile</h1>
   <form *ngIf="profile" (ngSubmit)="onSubmit()" #profileForm="ngForm">

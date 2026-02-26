@@ -53,4 +53,7 @@ export class PostJobComponent {
       }
     });
   }
+  goBack() {
+  this.router.navigate(['/employer/dashboard']);
+}
 }
