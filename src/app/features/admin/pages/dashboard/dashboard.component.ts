@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    // Optional ping
+
     this.adminService.ping().subscribe({
       next: (msg) => this.pingMessage = msg,
       error: (err) => console.error(err)

@@ -4,7 +4,6 @@
     <p class="company">{{ job.companyName }}</p>
     <p class="location">{{ job.location }}</p>
 
-    <!-- Meta row: salary, job type, deadline -->
     <div class="meta-row">
       <div class="meta-item salary" *ngIf="job.salaryMin">
         <span class="meta-label">Salary</span>
@@ -37,14 +36,13 @@
     <h3>Number of Openings</h3>
     <p>{{ job.numberOfOpenings }}</p>
 
-    <!-- Favourite Button -->
     <div *ngIf="authService.isLoggedIn() && authService.getRole() === 'JOB_SEEKER'" class="favourite-section">
       <button (click)="toggleFavourite()" class="favourite-btn">
         {{ isFavourite ? '★ Remove from Favourites' : '☆ Save to Favourites' }}
       </button>
     </div>
 
-    <!-- Apply Section -->
+
     <div class="apply-section" *ngIf="job.isActive && !job.isFilled">
       <div *ngIf="!authService.isLoggedIn()">
         <p><a routerLink="/login">Login</a> as a job seeker to apply.</p>
@@ -66,7 +64,7 @@
           </div>
         </div>
 
-        <!-- Success/Error messages always visible -->
+
         <p *ngIf="applySuccess" class="success">{{ applySuccess }}</p>
         <p *ngIf="applyError" class="error">{{ applyError }}</p>
       </div>

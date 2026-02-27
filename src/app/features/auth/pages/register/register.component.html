@@ -6,7 +6,7 @@
   </div>
   <h2>Register</h2>
   <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-    <!-- Common fields with validation messages -->
+
     <div class="form-group">
       <label for="name">Full Name *</label>
       <input type="text" id="name" name="name" [(ngModel)]="userData.name" #name="ngModel" required>
@@ -45,7 +45,6 @@
       <div *ngIf="role.invalid && role.touched" class="error-text">Role is required.</div>
     </div>
 
-    <!-- Job Seeker specific fields -->
     <div *ngIf="userData.role === 'JOB_SEEKER'" class="conditional-fields">
       <div class="form-group">
         <label for="employmentStatus">Employment Status</label>
@@ -59,7 +58,6 @@
       </div>
     </div>
 
-    <!-- Employer specific fields -->
     <div *ngIf="userData.role === 'EMPLOYER'" class="conditional-fields">
       <div class="form-group">
         <label for="companyName">Company Name *</label>
@@ -91,7 +89,6 @@
       </div>
     </div>
 
-    <!-- Security questions (both roles) -->
     <div class="form-group">
       <label for="securityQuestion">Security Question *</label>
       <input type="text" id="securityQuestion" name="securityQuestion" [(ngModel)]="userData.securityQuestion" #securityQuestion="ngModel" required>
@@ -103,7 +100,7 @@
       <div *ngIf="securityAnswer.invalid && securityAnswer.touched" class="error-text">Security answer is required.</div>
     </div>
 
-    <!-- Submit button - disabled if form invalid -->
+
     <button type="submit" [disabled]="registerForm.invalid">Register</button>
     <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
     <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>

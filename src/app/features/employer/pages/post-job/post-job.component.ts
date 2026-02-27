@@ -32,7 +32,6 @@ export class PostJobComponent {
   constructor(private jobService: JobService, private router: Router) {}
 
   onSubmit() {
-    // Convert comma-separated skills to array
     if (this.skillsInput.trim()) {
       this.jobData.requiredSkills = this.skillsInput.split(',').map(s => s.trim());
     } else {
@@ -43,7 +42,6 @@ export class PostJobComponent {
       next: (createdJob: JobPost) => {
         this.successMessage = 'Job posted successfully!';
         this.errorMessage = '';
-        // Optionally redirect to manage jobs after a delay
         setTimeout(() => this.router.navigate(['/employer/manage-jobs']), 2000);
       },
       error: (err) => {

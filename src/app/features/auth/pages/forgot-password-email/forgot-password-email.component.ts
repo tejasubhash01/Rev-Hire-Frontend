@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 
@@ -12,6 +12,13 @@ import { AuthService } from '../../../../core/services/auth.service';
     <div class="forgot-container">
       <div class="forgot-card">
         <h2>Forgot Password</h2>
+        <p *ngIf="message"
+         style="color:green;
+                text-align:center;
+                margin-bottom:1rem;
+                font-weight:500;">
+        {{ message }}
+      </p>
         <p class="instruction">Enter your registered email address. We'll send you a security question.</p>
         <form (ngSubmit)="onSubmit()" #emailForm="ngForm">
           <div class="form-group">
@@ -38,7 +45,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       justify-content: center;
       align-items: center;
       min-height: 80vh;
-      background-color: #f5f5f5;
+      background-color: #d6eaf8;
     }
     .forgot-card {
       background: white;
@@ -118,8 +125,14 @@ import { AuthService } from '../../../../core/services/auth.service';
 export class ForgotPasswordEmailComponent {
   email = '';
   error = '';
-
-  constructor(private authService: AuthService, private router: Router) {}
+  message = '';
+  constructor(private authService: AuthService, private router: Router,private route: ActivatedRoute ) {
+    this.route.queryParams.subscribe(params => {
+      if (params['message']) {
+        this.message = params['message'];
+      }
+    });
+  }
 
   onSubmit() {
     this.authService.forgotPassword(this.email).subscribe({

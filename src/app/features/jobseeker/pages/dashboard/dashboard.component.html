@@ -9,7 +9,6 @@
     <p><strong>Location:</strong> {{ profile.location || 'Not set' }}</p>
   </div>
 
-  <!-- Application Statistics -->
   <div *ngIf="stats && !loading" class="stats-grid">
     <div class="stat-card">
       <h3>Total Applications</h3>
@@ -37,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Action Buttons -->
+
  <div class="dashboard-actions">
   <a routerLink="/jobseeker/view-profile" class="profile-link">View Profile</a>
   <a routerLink="/jobseeker/profile" class="profile-link">Edit Profile</a>

@@ -45,8 +45,6 @@
 
       <p class="applied-date">Applied: {{ app.appliedDate | date:'medium' }}</p>
 
-      <!-- show extra details -->
-     <!-- show extra details -->
 <p *ngIf="app.education"><b>Education:</b> {{ app.education }}</p>
 <p *ngIf="app.experience"><b>Experience:</b> {{ app.experience }}</p>
 <p *ngIf="app.skills?.length"><b>Skills:</b> {{ app.skills?.join(', ') }}</p>
@@ -63,7 +61,6 @@
   </div>
 </div>
 
-<!-- Status Update Modal -->
 <div class="modal" *ngIf="showStatusModal" (click)="closeStatusModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Update Application Status</h3>
@@ -88,7 +85,6 @@
   </div>
 </div>
 
-<!-- Profile Modal (unchanged) -->
 <div class="modal" *ngIf="showProfileModal" (click)="closeProfileModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div *ngIf="profileLoading">Loading profile...</div>
@@ -128,7 +124,6 @@
   </div>
 </div>
 
-<!-- Note Modal (unchanged) -->
 <div class="modal" *ngIf="showNoteModal" (click)="closeNoteModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <h3>Add Note for {{ selectedApplication?.jobSeekerName }}</h3>

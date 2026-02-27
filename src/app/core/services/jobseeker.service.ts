@@ -101,14 +101,14 @@ export class JobseekerService {
     );
   }
 
-  // Fetch profile by user ID (old endpoint, kept for compatibility)
+
   getSeekerProfileByUserId(userId: number): Observable<JobSeekerProfile> {
     return this.http.get<any>(`${this.apiUrl}/profile/${userId}`).pipe(
       map(response => response.data)
     );
   }
 
-  // NEW: Fetch profile by profile ID (used by employer)
+
   getSeekerProfileByProfileId(profileId: number): Observable<JobSeekerProfile> {
     return this.http.get<any>(`${this.apiUrl}/profile/by-profile/${profileId}`).pipe(
       map(response => response.data)

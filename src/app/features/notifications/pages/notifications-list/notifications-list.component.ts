@@ -38,7 +38,7 @@ export class NotificationsListComponent implements OnInit {
   markAsRead(id: number) {
     this.notificationService.markAsRead(id).subscribe({
       next: () => {
-        this.loadNotifications(); // refresh list
+        this.loadNotifications();
       },
       error: (err) => {
         console.error(err);

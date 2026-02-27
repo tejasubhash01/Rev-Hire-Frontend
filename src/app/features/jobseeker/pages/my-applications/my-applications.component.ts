@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // <-- add this
+import { FormsModule } from '@angular/forms';
 import { ApplicationService, ApplicationResponse } from '../../../../core/services/application.service';
 
 @Component({
   selector: 'app-my-applications',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule], // <-- add FormsModule here
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './my-applications.component.html',
   styleUrls: ['./my-applications.component.css']
 })
@@ -16,7 +16,6 @@ export class MyApplicationsComponent implements OnInit {
   loading = true;
   error = '';
 
-  // Withdraw modal state
   showWithdrawModal = false;
   withdrawApplicationId: number | null = null;
   withdrawReason = '';
@@ -58,7 +57,7 @@ export class MyApplicationsComponent implements OnInit {
     this.applicationService.withdrawApplication(this.withdrawApplicationId, this.withdrawReason || undefined).subscribe({
       next: () => {
         this.closeWithdrawModal();
-        this.loadApplications(); // refresh list
+        this.loadApplications();
       },
       error: (err) => {
         console.error(err);

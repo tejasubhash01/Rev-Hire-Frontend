@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 export class ResumeComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  // Text resume
   resumeText: ResumeText = {
     id: 0,
     objective: '',
@@ -28,7 +27,7 @@ export class ResumeComponent implements OnInit {
   saveSuccess = '';
   saveError = '';
 
-  // File upload
+
   resumeFile: ResumeFile | null = null;
   selectedFile: File | null = null;
   uploadLoading = false;
@@ -65,7 +64,7 @@ export class ResumeComponent implements OnInit {
         this.resumeFile = data;
       },
       error: (err) => {
-        // 404 means no file, ignore
+
         if (err.status !== 404) {
           console.error('Error loading resume file:', err);
         }
@@ -128,7 +127,7 @@ export class ResumeComponent implements OnInit {
         this.uploadSuccess = 'File uploaded successfully.';
         this.uploadLoading = false;
         this.selectedFile = null;
-        this.fileInput.nativeElement.value = ''; // clear input
+        this.fileInput.nativeElement.value = '';
       },
       error: (err) => {
         console.error('Upload error:', err);

@@ -46,16 +46,12 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    // Create a copy of userData to avoid mutating the original
     const dataToSend = { ...this.userData };
 
-    // Remove empty string for employmentStatus to avoid enum conversion error
     if (dataToSend.employmentStatus === '') {
-      delete dataToSend.employmentStatus; // becomes undefined
+      delete dataToSend.employmentStatus;
     }
 
-    // For other optional fields, we can leave them as empty strings; the backend will handle them as null or empty.
-    // But if any other enum fields exist, handle similarly.
 
     console.log('Form submitted', dataToSend);
 

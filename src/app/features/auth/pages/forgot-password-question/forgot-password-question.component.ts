@@ -27,7 +27,21 @@ import { AuthService } from '../../../../core/services/auth.service';
           <button type="submit" [disabled]="answerForm.invalid">Verify Answer</button>
           <p *ngIf="error" class="error-message">{{ error }}</p>
         </form>
-        <p class="back-link"><a routerLink="/forgot-password">← Back to Email</a></p>
+        <p style="text-align:center; margin-top:1.5rem;">
+  <button
+    type="button"
+    (click)="goBack()"
+    style="
+      background:none;
+      border:none;
+      color:#007bff;
+      text-decoration:underline;
+      cursor:pointer;
+      font-size:1rem;
+    ">
+    ← Back to Email
+  </button>
+</p>
       </div>
     </div>
   `,
@@ -37,7 +51,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       justify-content: center;
       align-items: center;
       min-height: 80vh;
-      background-color: #f5f5f5;
+      background-color: #d6eaf8;
     }
     .forgot-card {
       background: white;
@@ -147,4 +161,8 @@ export class ForgotPasswordQuestionComponent {
       }
     });
   }
+  goBack() {
+  this.router.navigate(['/forgot-password'], {
+  });
+}
 }

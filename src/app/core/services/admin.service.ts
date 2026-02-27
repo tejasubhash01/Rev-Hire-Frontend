@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 
 export interface DbCheck {
   userCount: number;
-  // add more stats as needed
 }
 
 @Injectable({ providedIn: 'root' })

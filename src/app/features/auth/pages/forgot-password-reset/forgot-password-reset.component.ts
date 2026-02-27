@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-forgot-password-reset',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule,RouterLink],
   template: `
     <div class="forgot-container">
       <div class="forgot-card">
@@ -49,7 +49,7 @@ import { AuthService } from '../../../../core/services/auth.service';
       justify-content: center;
       align-items: center;
       min-height: 80vh;
-      background-color: #f5f5f5;
+      background-color: #d6eaf8;
     }
     .forgot-card {
       background: white;
@@ -156,3 +156,4 @@ export class ForgotPasswordResetComponent {
     });
   }
 }
+

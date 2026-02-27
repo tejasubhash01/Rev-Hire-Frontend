@@ -23,7 +23,7 @@ export class JobDetailComponent implements OnInit {
   applySuccess = '';
   applyError = '';
 
-  // Favourite properties
+
   isFavourite = false;
   favouriteId: number | null = null;
 
@@ -77,7 +77,7 @@ export class JobDetailComponent implements OnInit {
   toggleFavourite() {
     if (!this.job) return;
     if (this.isFavourite) {
-      // Remove from favourites
+
       this.favouritesService.removeFavourite(this.job.id).subscribe({
         next: () => {
           this.isFavourite = false;
@@ -89,11 +89,11 @@ export class JobDetailComponent implements OnInit {
         }
       });
     } else {
-      // Add to favourites
+
       this.favouritesService.addFavourite(this.job.id).subscribe({
         next: (response) => {
           this.isFavourite = true;
-          // If the response contains the favourite id, you could store it
+
         },
         error: (err) => {
           console.error('Error adding favourite:', err);

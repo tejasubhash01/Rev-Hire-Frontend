@@ -57,7 +57,6 @@ export class ProfileComponent implements OnInit {
   this.successMessage = 'Profile updated successfully.';
   this.errorMessage = '';
 
-  // ✅ Navigate to Employer Dashboard
   setTimeout(() => {
     this.router.navigate(['/employer/dashboard']);
   }, 1500);

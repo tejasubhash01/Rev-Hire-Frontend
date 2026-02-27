@@ -30,12 +30,11 @@ export class EnumsComponent implements OnInit {
     });
   }
 
-  // Helper to check if value is array
+
   isArray(value: any): boolean {
     return Array.isArray(value);
   }
 
-  // Get object keys
   objectKeys(obj: any): string[] {
     return obj ? Object.keys(obj) : [];
   }

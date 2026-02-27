@@ -17,7 +17,6 @@ export class ManageJobsComponent implements OnInit {
   loading = true;
   error = '';
 
-  // Modal state
   showConfirmModal = false;
   confirmAction: 'close' | 'reopen' | 'markFilled' | 'delete' | null = null;
   selectedJobId: number | null = null;

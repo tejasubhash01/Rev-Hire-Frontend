@@ -19,14 +19,13 @@ import { JobseekerService, JobSeekerProfile } from '../../../../core/services/jo
 export class JobApplicantsComponent implements OnInit {
   jobId!: number;
 
-  // ✅ keep original + filtered
+
   allApplicants: ApplicationResponse[] = [];
   filteredApplicants: ApplicationResponse[] = [];
 
   loading = true;
   error = '';
 
-  // ✅ Filters
   search = '';
   skill = '';
   education = '';
@@ -39,13 +38,11 @@ export class JobApplicantsComponent implements OnInit {
   showNoteModal = false;
   noteContent = '';
 
-  // Profile modal
   showProfileModal = false;
   selectedSeekerProfile: JobSeekerProfile | null = null;
   profileLoading = false;
   profileError = '';
 
-  // Status update modal
   showStatusModal = false;
   statusUpdateData: UpdateApplicationStatusRequest = { status: '', employerNotes: '' };
   statusApplicationId: number | null = null;
@@ -77,7 +74,6 @@ export class JobApplicantsComponent implements OnInit {
     });
   }
 
-  // ✅ Call this on input/change in HTML
   applyFilters() {
     const q = (this.search || '').toLowerCase().trim();
     const skill = (this.skill || '').toLowerCase().trim();
@@ -92,17 +88,15 @@ export class JobApplicantsComponent implements OnInit {
     this.filteredApplicants = this.allApplicants.filter(a => {
       const name = (a.jobSeekerName || '').toLowerCase();
 
-      // backend added these fields
       const educationText = ((a as any).education || '').toLowerCase();
       const experienceText = ((a as any).experience || '').toLowerCase();
 
-      // ✅ IMPORTANT: skills is array now
       const skillsText = (((a as any).skills ?? []) as string[]).join(' ').toLowerCase();
 
       const statusText = (a.status || '').toLowerCase();
       const applied = a.appliedDate ? new Date(a.appliedDate) : null;
 
-      // Search in all
+
       const matchesQ =
         !q ||
         name.includes(q) ||
@@ -201,7 +195,7 @@ export class JobApplicantsComponent implements OnInit {
         const index = this.allApplicants.findIndex(a => a.id === updated.id);
         if (index !== -1) this.allApplicants[index] = updated;
 
-        // ✅ refresh list after update
+
         this.applyFilters();
         this.closeStatusModal();
       },
@@ -225,7 +219,7 @@ export class JobApplicantsComponent implements OnInit {
         const index = this.allApplicants.findIndex(a => a.id === updated.id);
         if (index !== -1) this.allApplicants[index] = updated;
 
-        // ✅ refresh list after note update
+
         this.applyFilters();
         this.closeNoteModal();
       },
